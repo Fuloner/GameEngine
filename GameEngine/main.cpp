@@ -36,6 +36,7 @@ int main(void)
         return -1;
     }
 
+    //第一个三角形的顶点数据结构
     std::vector<float> vertices =
     {
         0.0f, 0.5f, 0.0f,
