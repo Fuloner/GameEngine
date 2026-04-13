@@ -72,8 +72,8 @@ int main(void)
         }
     )";
 
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fragmentShaderCStr = vertexShaderSource.c_str();
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // glCreateShader 参数 GL_FRAGMENT_SHADER 表示创建一个片段着色器对象
+    const char* fragmentShaderCStr = fragmentShaderSource.c_str();
     glShaderSource(fragmentShader, 1, &fragmentShaderCStr, nullptr);
     glCompileShader(fragmentShader);
 
@@ -85,16 +85,16 @@ int main(void)
         std::cerr << "ERROR:FRAGMENT_SHADER_COMPILATION_FAILED" << infoLog << std::endl;
     }
 
-    GLuint shaderProgram = glCreateProgram();
+    GLuint shaderProgram = glCreateProgram(); //创建一个空的着色器程序对象
     glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+    glAttachShader(shaderProgram, fragmentShader); //将之前编译好的顶点着色器 vertexShader 和片段着色器 fragmentShader 附加到程序对象上
+    glLinkProgram(shaderProgram); //链接程序
 
-    glGetShaderiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (&success)
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success)
     {
         char infoLog[512];
-        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
         std::cerr << "ERROR:SHADER_PROGRAM_LINKING_FAILED" << infoLog << std::endl;
     }
 
