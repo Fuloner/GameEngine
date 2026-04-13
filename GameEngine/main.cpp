@@ -109,11 +109,33 @@ int main(void)
         0.5f, -0.5f, 0.0f
     };
 
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
     //进入主循环 glfwWindowShouldClose 用于接收关闭请求
     while (!glfwWindowShouldClose(window))
     {
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f); //设置清屏颜色 本身还没有真正把屏幕变成相应颜色
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f); //设置清屏颜色 本身还没有真正把屏幕变成相应颜色
         glClear(GL_COLOR_BUFFER_BIT); //用刚才设置的清屏颜色清空颜色缓冲区
+
+        glUseProgram(shaderProgram);
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
         glfwSwapBuffers(window); //交换前后缓冲区，把刚绘制好的画面显示到窗口上
         
         glfwPollEvents(); //处理所有待处理的事件
